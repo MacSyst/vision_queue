@@ -77,7 +77,7 @@ AddEventHandler("playerConnecting", function(name, setCallback, deferrals)
     local discordMessage = {
         embeds = {{
             title = "VisionAC - Joined",
-            description = "Player was Banned!",
+            description = "Player was Joined!",
             fields = {
                 {name = "Player:", value = "```" ..identifier.. "```"},
                 {name = "Firstname:", value = "```" ..row.firstname.. "```"},
