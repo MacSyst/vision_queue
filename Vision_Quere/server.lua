@@ -1,7 +1,9 @@
 local DISCORD_WEBHOOK_URL = Config.webhook
+local DISOCRD_THUMBNAIL = Config.thumbnail
 local queueTime = Config.queueTime
 local maxPlayers = Config.maxPlayers
 local queue = {}
+local lastseen = {}
 
 if Config.startup then
     print("^9-----------------------------------------------------------------------------^0")
@@ -25,7 +27,7 @@ AddEventHandler("playerConnecting", function(name, setCallback, deferrals)
     local queuePosition = #queue + 1
     local identifier = GetPlayerIdentifierByType(source, "license"):gsub("license", "char1")
     -- gsub ist da um denn string zu ändern von license: zu char1:
-    local row = MySQL.single.await('SELECT `firstname`, `lastname`, `group`, `job` FROM `users` WHERE `identifier` = ? LIMIT 1', {
+    local row = MySQL.single.await('SELECT `firstname`, `lastname`, `group`, `job`, `position`, `dateofbirth`, `height`, `sex`, `last_seen` FROM `users` WHERE `identifier` = ? LIMIT 1', {
         identifier
     })
 
@@ -74,16 +76,21 @@ AddEventHandler("playerConnecting", function(name, setCallback, deferrals)
 if Config.discord then
     local discordMessage = {
         embeds = {{
-            title = "VisionAC - Joined",
+            title = "VisionQueue - Joined",
             description = "Player Joined!",
             fields = {
                 {name = "Player:", value = "```" ..identifier.. "```"},
                 {name = "Firstname:", value = "```" ..row.firstname.. "```"},
                 {name = "Lastname:", value = "```" ..row.lastname.. "```"},
+                {name = "LastSeen:", value = "```" ..row.last_seen.. "```"},
+                {name = "Date of Birth:", value = "```" ..row.dateofbirth.. "```"},
+                {name = "Height:", value = "```" ..row.height.. "```"},
+                {name = "Sex:", value = "```" ..row.sex.. "```"},
                 {name = "Group:", value = "```" ..row.group.. "```"},
-                {name = "Job:", value = "```" ..row .job.. "```"}    
+                {name = "Job:", value = "```" ..row .job.. "```"},
+                {name = "Position:", value = "```" ..row.position.. "```"}
             },
-            thumbnail = {url = "https://cdn.discordapp.com/attachments/1225882766625996880/1227326392518181034/team.png"},
+            thumbnail = {url = DISOCRD_THUMBNAIL},
             timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ"),
             color = 0x808080
         }}
@@ -96,8 +103,21 @@ end
         return
     end
 
-
-    print("[^6VisionQueue^0 - ^6Queue^0] ^0Player ^1"..identifier.."^0 connected, name: ^1"..row.firstname.." "..row.lastname.."^0, group: ^1"..row.group.."^0, job: ^1"..row.job.."^0")
+    print("^6----------------------------------------------------------------------------------------------------------------------^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Player: ^1"..identifier:gsub("char1", "license").."^0")
+    print("^6----------------------------------------------------------------------------------------------------------------------^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Player: ^1"..identifier.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Firstname: ^1"..row.firstname.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Lastname: ^1"..row.lastname.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0birthday: ^1"..row.dateofbirth.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Height: ^1"..row.height.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Sex: ^1"..row.sex:gsub("m", "Male"):gsub("f", "Female").."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Group: ^1"..row.group.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Job: ^1"..row.job.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Last seen: ^1"..row.last_seen.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Position: ^1"..row.position.."^0")
+    print(os.date('%x %X '))
+    print("^6----------------------------------------------------------------------------------------------------------------------^0")
 end)
 
 AddEventHandler("playerDropped", function(reason)
