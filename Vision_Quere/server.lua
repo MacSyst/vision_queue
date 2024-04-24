@@ -108,9 +108,10 @@ end
         return os.date("%d.%m.%Y %A | %H:%M", seconds)
     end
 
+    local row_created_at = row.created_at
     local row_last_seen = row.last_seen
     local last_seen_date = convertTimestampToReadable(row_last_seen)
-    local first_join_date = convertTimestampToReadable(row.created_at)
+    local first_join_date = convertTimestampToReadable(row_created_at)
 
     print("^6----------------------------------------------------------------------------------------------------------------------^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Player: ^1"..identifier:gsub("char1", "license").."^0")
