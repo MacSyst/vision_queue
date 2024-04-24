@@ -27,7 +27,7 @@ AddEventHandler("playerConnecting", function(name, setCallback, deferrals)
     local queuePosition = #queue + 1
     local identifier = GetPlayerIdentifierByType(source, "license"):gsub("license", "char1")
     -- gsub ist da um denn string zu ändern von license: zu char1:
-    local row = MySQL.single.await('SELECT `firstname`, `lastname`, `group`, `job`, `position`, `dateofbirth`, `height`, `sex`, `last_seen` FROM `users` WHERE `identifier` = ? LIMIT 1', {
+    local row = MySQL.single.await('SELECT `firstname`, `lastname`, `group`, `job`, `position`, `dateofbirth`, `height`, `sex`, `last_seen`, `created_at` FROM `users` WHERE `identifier` = ? LIMIT 1', {
         identifier
     })
 
@@ -103,10 +103,18 @@ end
         return
     end
 
+    function convertTimestampToReadable(timestamp)
+        local seconds = timestamp / 1000
+        return os.date("%d.%m.%Y %A | %H:%M", seconds)
+    end
+
+    local row_last_seen = row.last_seen
+    local last_seen_date = convertTimestampToReadable(row_last_seen)
+    local first_join_date = convertTimestampToReadable(row.created_at)
+
     print("^6----------------------------------------------------------------------------------------------------------------------^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Player: ^1"..identifier:gsub("char1", "license").."^0")
     print("^6----------------------------------------------------------------------------------------------------------------------^0")
-    print("[^6VisionQueue^0 - ^6Queue^0] ^0Player: ^1"..identifier.."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Firstname: ^1"..row.firstname.."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Lastname: ^1"..row.lastname.."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0birthday: ^1"..row.dateofbirth.."^0")
@@ -114,9 +122,9 @@ end
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Sex: ^1"..row.sex:gsub("m", "Male"):gsub("f", "Female").."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Group: ^1"..row.group.."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Job: ^1"..row.job.."^0")
-    print("[^6VisionQueue^0 - ^6Queue^0] ^0Last seen: ^1"..row.last_seen.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Last seen: ^1"..last_seen_date.."^0")
+    print("[^6VisionQueue^0 - ^6Queue^0] ^0Created at: ^1"..first_join_date.."^0")
     print("[^6VisionQueue^0 - ^6Queue^0] ^0Position: ^1"..row.position.."^0")
-    print(os.date('%x %X '))
     print("^6----------------------------------------------------------------------------------------------------------------------^0")
 end)
 
