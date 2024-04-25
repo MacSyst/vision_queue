@@ -4,7 +4,7 @@ game 'gta5'
 name 'mac_queue'
 author 'VisonQueue / benrizzz'
 discription 'a good queue for servers'
-github 'https://github.com/MacSyst/mac_queue'
+github 'https://github.com/MacSyst/vision_queue/'
 
 
 lua52 "yes"
