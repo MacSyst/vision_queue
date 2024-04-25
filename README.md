@@ -1,5 +1,5 @@
 
-# MAX_QUEUE
+# VISION_QUEUE
 
 a queue script that prevents players from overloading the server
 
