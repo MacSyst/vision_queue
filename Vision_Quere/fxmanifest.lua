@@ -7,7 +7,7 @@ discription 'a good queue for servers'
 github 'https://github.com/MacSyst/vision_queue/'
 
 
-lua52 "yes"
+lua54 "yes"
 version '1.0.0'
 
 
