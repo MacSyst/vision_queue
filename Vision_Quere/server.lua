@@ -5,6 +5,8 @@ local maxPlayers = Config.maxPlayers
 local queue = {}
 local lastseen = {}
 
+SetConvarServerInfo('tags', 'Vision-Scripts')
+
 if Config.startup then
     print("^9-----------------------------------------------------------------------------^0")
     print("##     ## ####  ######  ####  #######  ##    ##  #######  ##     ## ######## ##     ## ######## ")    
