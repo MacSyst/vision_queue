@@ -1,4 +1,4 @@
-
+https://discord.gg/jsCCcUZgHt
 # VISION_QUEUE
 
 a queue script that prevents players from overloading the server
